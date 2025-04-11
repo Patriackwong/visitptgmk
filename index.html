@@ -46,23 +46,6 @@
       color: white;
     }
 
-    .modal-content {
-      background-color: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .modal-body {
-      font-size: 18px;
-      color: #555;
-      text-align: center;
-    }
-
-    .modal-title {
-      font-weight: 600;
-      color: #4CAF50;
-    }
-
     .footer {
       position: fixed;
       bottom: 0;
@@ -87,12 +70,10 @@
       margin-bottom: 20px;
     }
 
-    .pdpa-section {
+    #demo {
       margin-top: 20px;
-    }
-
-    #signupSection {
-      display: none;
+      font-size: 16px;
+      color: #888;
     }
   </style>
 
@@ -100,7 +81,7 @@
 </head>
 <body>
   <div class="container text-center">
-    <img src="url appscript" alt="Logo" class="logo">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTytwug670ZT-11TYlXrUSICFqRsBv5_WCqmQ&s" alt="Logo" class="logo">
 
     <h1>บันทึกเวลาการทำของพนักงานขับรถประจำคลังแม่กลอง</h1>
     <p>กดปุ่มด้านล่าง เพื่อบันทึกการลงเข้า </p>
@@ -114,7 +95,6 @@
       <button type="button" class="btn btn-danger" onclick="getLocationOut()">Check-Out</button>
     </div>
 
-    <h2><font color="red">เมื่อเลิกงานแล้วอย่าลืม Check-Out เพื่อสิทธิประโยชน์ของผู้ทำงานเอง</font></h2>
     <p id="demo"></p>
 
     <!-- PDPA Section -->
@@ -123,16 +103,6 @@
       <label for="pdpaConsent">ฉันขออนุญาตให้เก็บข้อมูลตามข้อกำหนด PDPA</label>
       <br>
       <a href="https://patriackwong.github.io/PTGMKDEPOTPDPA/" target="_blank">รายละเอียดนโยบายความเป็นส่วนตัว (Privacy Notice)</a>
-    </div>
-
-    <!-- Sign Up Section -->
-    <div id="signupSection">
-      <h2>กรุณาลงทะเบียน</h2>
-      <form id="signupForm">
-        <input type="text" id="lineId" class="form-control" placeholder="Line User ID" required>
-        <input type="text" id="lineName" class="form-control" placeholder="Line Profile Name" required>
-        <button type="button" class="btn btn-success" onclick="submitSignup()">สมัครสมาชิก</button>
-      </form>
     </div>
 
     <!-- Modal for loading status -->
@@ -151,7 +121,24 @@
   </div>
 
   <script>
-    const xurl = "https://script.google.com/macros/s/AKfycbyD8kN9xteg87TbSTqoE8jIOuDsw94b4H1otizZPF5r9GvTOCCogAjLi92J9uCRX6NUPg/exec";
+    window.onload = function() {
+      initializeLiff('2007093655-w36av5l4');  // ใส่ LIFF ID ของคุณที่นี่
+    }
+
+    const xurl = "https://script.google.com/macros/s/AKfycbzD2FX64OX7O8TKd3FPW1t1GbNUCqjw951oIUHspyADBh6XgGT8OFAtf5Pfha7ub6i_/exec";
+
+    function initializeLiff(myLiffId) {
+      liff
+        .init({ liffId: myLiffId })
+        .then(() => {
+          console.log('LIFF Initialized successfully');
+        })
+        .catch((err) => {
+          console.error('LIFF Initialization failed', err);
+        });
+    }
+
+    var x = document.getElementById("demo");
 
     function showLoading() {
       $('#loadingModal').modal({
@@ -266,28 +253,6 @@
         console.error("Error fetching LIFF profile:", err);
         hideLoading();
       });
-    }
-
-    function submitSignup() {
-      var lineId = document.getElementById("lineId").value;
-      var lineName = document.getElementById("lineName").value;
-
-      // ส่งข้อมูล Line UserId และ Line Profile Name ไปยัง Google Script
-      var xmlhttp = new XMLHttpRequest();
-      var theUrl = xurl + "?action=signup&lineId=" + lineId + "&lineName=" + lineName;
-      xmlhttp.open('GET', theUrl);
-      xmlhttp.send();
-
-      xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var jsonResponse = JSON.parse(this.responseText);
-          alert(jsonResponse.desc);
-
-          document.getElementById("signupSection").style.display = "none";  // ซ่อนฟอร์มสมัครสมาชิก
-        } else if (this.readyState == 4) {
-          alert('Error: ' + this.status + ' - ' + this.statusText);
-        }
-      };
     }
   </script>
 
